@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="lib/swagger-annotations.jar" sourcepath="src/swagger-annotations.java.zip"/>
+	<classpathentry exported="true" kind="lib" path="lib/swagger-core.jar" sourcepath="src/swagger-core.java.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
