@@ -1,0 +1,11 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+swagger-core,io.swagger.util,ParameterDeserializer,17,83,5,11,3,19,4,6,0,2
+swagger-core,io.swagger.util,SecurityDefinitionDeserializer,7,47,3,5,1,12,3,3,0,2
+swagger-core,io.swagger.util,PropertyDeserializer,30,319,8,22,2,64,8,16,0,9
+swagger-core,io.swagger.util,Json,9,91,0,2,5,21,1,7,1,6
+swagger-core,io.swagger.util,ModelDeserializer,0,128,3,13,0,29,3,7,0,2
+swagger-core,io.swagger.converter,ModelConverterContextImpl,36,147,7,11,4,37,7,10,0,8
+swagger-core,io.swagger.core.filter,AbstractSpecFilter,0,9,0,0,0,4,0,4,0,4
+swagger-core,io.swagger.core.filter,SpecFilter,0,323,2,24,0,57,2,15,0,4
+swagger-core,io.swagger.model,ApiDescription,0,23,0,0,0,10,0,5,0,5
+swagger-core,io.swagger.config,ConfigFactory,3,0,0,0,1,0,1,0,1,0

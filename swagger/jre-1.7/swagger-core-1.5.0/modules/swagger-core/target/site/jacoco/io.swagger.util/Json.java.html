@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Json.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">swagger-core</a> &gt; <a href="index.source.html" class="el_package">io.swagger.util</a> &gt; <span class="el_source">Json.java</span></div><h1>Json.java</h1><pre class="source lang-java linenums">package io.swagger.util;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import io.swagger.models.Model;
+import io.swagger.models.auth.SecuritySchemeDefinition;
+import io.swagger.models.parameters.Parameter;
+import io.swagger.models.properties.Property;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+<span class="nc" id="L17">public class Json {</span>
+<span class="fc" id="L18">    static Logger LOGGER = LoggerFactory.getLogger(Json.class);</span>
+    static ObjectMapper mapper;
+
+    public static ObjectMapper mapper() {
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (mapper == null) {</span>
+<span class="fc" id="L23">            mapper = create();</span>
+        }
+<span class="fc" id="L25">        return mapper;</span>
+    }
+
+    public static ObjectMapper create() {
+<span class="fc" id="L29">        mapper = new ObjectMapper();</span>
+
+        // load any jackson modules
+<span class="fc" id="L32">        SimpleModule module = new SimpleModule();</span>
+<span class="fc" id="L33">        module.addDeserializer(Property.class, new PropertyDeserializer());</span>
+<span class="fc" id="L34">        module.addDeserializer(Model.class, new ModelDeserializer());</span>
+<span class="fc" id="L35">        module.addDeserializer(Parameter.class, new ParameterDeserializer());</span>
+<span class="fc" id="L36">        module.addDeserializer(SecuritySchemeDefinition.class, new SecurityDefinitionDeserializer());</span>
+<span class="fc" id="L37">        mapper.registerModule(module);</span>
+<span class="fc" id="L38">        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);</span>
+<span class="fc" id="L39">        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);</span>
+<span class="fc" id="L40">        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);</span>
+<span class="fc" id="L41">        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);</span>
+
+<span class="fc" id="L43">        return mapper;</span>
+    }
+
+    public static ObjectWriter pretty() {
+<span class="fc" id="L47">        return mapper().writer(new DefaultPrettyPrinter());</span>
+    }
+
+    public static String pretty(Object o) {
+        try {
+<span class="fc" id="L52">            return pretty().writeValueAsString(o);</span>
+<span class="nc" id="L53">        } catch (Exception e) {</span>
+<span class="nc" id="L54">            return null;</span>
+        }
+    }
+
+    public static void prettyPrint(Object o) {
+        try {
+<span class="fc" id="L60">            System.out.println(pretty().writeValueAsString(o).replace(&quot;\r&quot;, &quot;&quot;));</span>
+<span class="nc" id="L61">        } catch (Exception e) {</span>
+<span class="nc" id="L62">            e.printStackTrace();</span>
+<span class="fc" id="L63">        }</span>
+<span class="fc" id="L64">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

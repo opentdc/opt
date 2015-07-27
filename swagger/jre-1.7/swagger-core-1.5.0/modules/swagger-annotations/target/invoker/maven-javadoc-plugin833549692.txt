@@ -1,0 +1,69 @@
+Invoking Maven for the goals: [org.apache.maven.plugins:maven-javadoc-plugin:2.7:javadoc] with no properties
+
+M2_HOME=/Users/bruno/proj/rep/apache-maven-3.2.5
+MAVEN_OPTS=null
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_76.jdk/Contents/Home/jre
+JAVA_OPTS=null
+
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building swagger-core 1.5.0
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] >>> maven-javadoc-plugin:2.7:javadoc (default-cli) > generate-sources @ swagger-core >>>
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.pom (20 KB at 54.3 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/32/commons-parent-32.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/32/commons-parent-32.pom (52 KB at 387.6 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/io/swagger/swagger-models/1.5.0/swagger-models-1.5.0.pom
+[WARNING] Checksum validation failed, expected cb73c41655d48945f669a794958de3d5bfa70ca5 but is a499bf39856c2bcc1ddf63265167a2ebf3bdc9ce for https://repo.maven.apache.org/maven2/io/swagger/swagger-models/1.5.0/swagger-models-1.5.0.pom
+[WARNING] Could not validate integrity of download from https://repo.maven.apache.org/maven2/io/swagger/swagger-models/1.5.0/swagger-models-1.5.0.pom: Checksum validation failed, expected cb73c41655d48945f669a794958de3d5bfa70ca5 but is a499bf39856c2bcc1ddf63265167a2ebf3bdc9ce
+[WARNING] Checksum validation failed, expected cb73c41655d48945f669a794958de3d5bfa70ca5 but is a499bf39856c2bcc1ddf63265167a2ebf3bdc9ce for https://repo.maven.apache.org/maven2/io/swagger/swagger-models/1.5.0/swagger-models-1.5.0.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/io/swagger/swagger-models/1.5.0/swagger-models-1.5.0.pom (3 KB at 22.9 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-module-scala_2.10/2.4.2/jackson-module-scala_2.10-2.4.2.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-module-scala_2.10/2.4.2/jackson-module-scala_2.10-2.4.2.pom (5 KB at 59.1 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/com/google/guava/guava/18.0/guava-18.0.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/com/google/guava/guava/18.0/guava-18.0.pom (6 KB at 98.8 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.pom (8 KB at 141.6 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-guava/2.4.2/jackson-datatype-guava-2.4.2.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-guava/2.4.2/jackson-datatype-guava-2.4.2.pom (4 KB at 20.5 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.jar
+[INFO] Downloading: https://repo.maven.apache.org/maven2/io/swagger/swagger-models/1.5.0/swagger-models-1.5.0.jar
+[INFO] Downloading: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-module-scala_2.10/2.4.2/jackson-module-scala_2.10-2.4.2.jar
+[INFO] Downloading: https://repo.maven.apache.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar
+[INFO] Downloading: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-guava/2.4.2/jackson-datatype-guava-2.4.2.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.2.1/commons-lang3-3.2.1.jar (377 KB at 1435.4 KB/sec)
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/io/swagger/swagger-models/1.5.0/swagger-models-1.5.0.jar (103 KB at 327.9 KB/sec)
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-guava/2.4.2/jackson-datatype-guava-2.4.2.jar (61 KB at 194.1 KB/sec)
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/com/fasterxml/jackson/module/jackson-module-scala_2.10/2.4.2/jackson-module-scala_2.10-2.4.2.jar (516 KB at 1044.9 KB/sec)
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar (2204 KB at 2188.0 KB/sec)
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.0-beta-1:enforce (enforce-maven) @ swagger-core ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.0-beta-1:enforce (enforce-versions) @ swagger-core ---
+[INFO] 
+[INFO] --- scala-maven-plugin:3.1.5:add-source (default) @ swagger-core ---
+[INFO] Add Source directory: /Users/bruno/proj/opentdc/opt/swagger/jre-1.7/swagger-core-1.5.0/modules/swagger-core/src/main/scala
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.2.201409121644:prepare-agent (default-prepare-agent) @ swagger-core ---
+[INFO] argLine set to -javaagent:/Users/bruno/.m2/repository/org/jacoco/org.jacoco.agent/0.7.2.201409121644/org.jacoco.agent-0.7.2.201409121644-runtime.jar=destfile=/Users/bruno/proj/opentdc/opt/swagger/jre-1.7/swagger-core-1.5.0/modules/swagger-core/target/jacoco.exec,excludes=**/io/swagger/config/FilterFactory.*:**/io/swagger/model/ApiInfo.*:**/io/swagger/util/Yaml.*:**/io/swagger/jackson/*:**/io/swagger/converter/ModelConverters.*:**/io/swagger/jaxrs/json/JacksonJsonProvider.*:**/io/swagger/jaxrs/listing/ApiListingResource.*:**/io/swagger/jaxrs/listing/SwaggerSerializers.*:**/io/swagger/jaxrs/config/WebXMLReader.*:**/io/swagger/jaxrs/config/DefaultJaxrsScanner.*:**/io/swagger/jaxrs/config/DefaultJaxrsConfig.*
+[INFO] 
+[INFO] <<< maven-javadoc-plugin:2.7:javadoc (default-cli) < generate-sources @ swagger-core <<<
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.7:javadoc (default-cli) @ swagger-core ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 3.864 s
+[INFO] Finished at: 2015-06-14T23:12:26+02:00
+[INFO] Final Memory: 20M/310M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-javadoc-plugin:2.7:javadoc (default-cli) on project swagger-core: An error has occurred in JavaDocs report generation:Unable to find javadoc command: The javadoc executable '/Library/Java/JavaVirtualMachines/jdk1.7.0_76.jdk/Contents/Home/jre/bin/javadoc' doesn't exist or is not a file. Verify the JAVA_HOME environment variable. -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

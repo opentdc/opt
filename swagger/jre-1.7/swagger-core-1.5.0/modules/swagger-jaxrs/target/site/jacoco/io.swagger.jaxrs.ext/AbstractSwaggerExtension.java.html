@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractSwaggerExtension.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">swagger-jaxrs</a> &gt; <a href="index.source.html" class="el_package">io.swagger.jaxrs.ext</a> &gt; <span class="el_source">AbstractSwaggerExtension.java</span></div><h1>AbstractSwaggerExtension.java</h1><pre class="source lang-java linenums">package io.swagger.jaxrs.ext;
+
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.models.parameters.Parameter;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+<span class="fc" id="L16">public abstract class AbstractSwaggerExtension implements SwaggerExtension {</span>
+
+    @Override
+    public String extractOperationMethod(ApiOperation apiOperation, Method method, Iterator&lt;SwaggerExtension&gt; chain) {
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (chain.hasNext()) {</span>
+<span class="nc" id="L21">            return chain.next().extractOperationMethod(apiOperation, method, chain);</span>
+        } else {
+<span class="fc" id="L23">            return null;</span>
+        }
+    }
+
+    @Override
+    public List&lt;Parameter&gt; extractParameters(List&lt;Annotation&gt; annotations, Type type, Set&lt;Type&gt; typesToSkip,
+                                             Iterator&lt;SwaggerExtension&gt; chain) {
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if (chain.hasNext()) {</span>
+<span class="nc" id="L31">            return chain.next().extractParameters(annotations, type, typesToSkip, chain);</span>
+        } else {
+<span class="nc" id="L33">            return Collections.emptyList();</span>
+        }
+    }
+
+    protected boolean shouldIgnoreClass(Class&lt;?&gt; cls) {
+<span class="nc" id="L38">        return false;</span>
+    }
+
+    protected boolean shouldIgnoreType(Type type, Set&lt;Type&gt; typesToSkip) {
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (typesToSkip.contains(type)) {</span>
+<span class="nc" id="L43">            return true;</span>
+        }
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (shouldIgnoreClass(constructType(type).getRawClass())) {</span>
+<span class="fc" id="L46">            typesToSkip.add(type);</span>
+<span class="fc" id="L47">            return true;</span>
+        }
+<span class="fc" id="L49">        return false;</span>
+    }
+
+    protected JavaType constructType(Type type) {
+<span class="fc" id="L53">        return TypeFactory.defaultInstance().constructType(type);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

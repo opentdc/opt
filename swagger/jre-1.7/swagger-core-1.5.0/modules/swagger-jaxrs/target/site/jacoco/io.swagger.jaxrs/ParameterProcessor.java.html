@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ParameterProcessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">swagger-jaxrs</a> &gt; <a href="index.source.html" class="el_package">io.swagger.jaxrs</a> &gt; <span class="el_source">ParameterProcessor.java</span></div><h1>ParameterProcessor.java</h1><pre class="source lang-java linenums">package io.swagger.jaxrs;
+
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiParam;
+import io.swagger.converter.ModelConverters;
+import io.swagger.models.Model;
+import io.swagger.models.Swagger;
+import io.swagger.models.parameters.AbstractSerializableParameter;
+import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.Parameter;
+import io.swagger.models.properties.ArrayProperty;
+import io.swagger.models.properties.Property;
+import io.swagger.models.properties.PropertyBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.core.Context;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L31">public class ParameterProcessor {</span>
+<span class="fc" id="L32">    private static final Table&lt;Class&lt;? extends AllowableValues&gt;, Boolean, AbstractAllowableValuesProcessor&lt;?, ?&gt;&gt; ALLOWED_VALUES_PROCESSORS =</span>
+            HashBasedTable.create();
+<span class="fc" id="L34">    static Logger LOGGER = LoggerFactory.getLogger(ParameterProcessor.class);</span>
+
+    public static Parameter applyAnnotations(Swagger swagger, Parameter parameter, Type type, List&lt;Annotation&gt; annotations) {
+<span class="fc" id="L37">        final AnnotationsHelper helper = new AnnotationsHelper(annotations);</span>
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (helper.isContext()) {</span>
+<span class="nc" id="L39">            return null;</span>
+        }
+<span class="fc" id="L41">        final ParamWrapper&lt;?&gt; param = helper.getApiParam();</span>
+<span class="fc" id="L42">        final String defaultValue = helper.getDefaultValue();</span>
+<span class="fc" id="L43">        final JavaType javaType = TypeFactory.defaultInstance().constructType(type);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (parameter instanceof AbstractSerializableParameter) {</span>
+<span class="fc" id="L45">            final AbstractSerializableParameter&lt;?&gt; p = (AbstractSerializableParameter&lt;?&gt;) parameter;</span>
+
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (param.isRequired()) {</span>
+<span class="fc" id="L48">                p.setRequired(true);</span>
+            }
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (StringUtils.isNotEmpty(param.getName())) {</span>
+<span class="fc" id="L51">                p.setName(param.getName());</span>
+            }
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (StringUtils.isNotEmpty(param.getDescription())) {</span>
+<span class="fc" id="L54">                p.setDescription(param.getDescription());</span>
+            }
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            if (StringUtils.isNotEmpty(param.getAccess())) {</span>
+<span class="nc" id="L57">                p.setAccess(param.getAccess());</span>
+            }
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (StringUtils.isNotEmpty(param.getDataType())) {</span>
+<span class="fc" id="L60">                p.setType(param.getDataType());</span>
+            }
+
+<span class="fc" id="L63">            AllowableValues allowableValues = null;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (StringUtils.isNotEmpty(param.getAllowableValues())) {</span>
+<span class="fc" id="L65">                allowableValues = AllowableRangeValues.create(param.getAllowableValues());</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">                if (allowableValues == null) {</span>
+<span class="fc" id="L67">                    allowableValues = AllowableEnumValues.create(param.getAllowableValues());</span>
+                }
+            }
+
+<span class="fc bfc" id="L71" title="All 4 branches covered.">            if (p.getItems() != null || param.isAllowMultiple()) {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                if (p.getItems() == null) {</span>
+                    // Convert to array
+<span class="fc" id="L74">                    final Map&lt;PropertyBuilder.PropertyId, Object&gt; args = new EnumMap&lt;PropertyBuilder.PropertyId, Object&gt;(PropertyBuilder.PropertyId.class);</span>
+<span class="fc" id="L75">                    args.put(PropertyBuilder.PropertyId.DEFAULT, p.getDefaultValue());</span>
+<span class="fc" id="L76">                    p.setDefaultValue(null);</span>
+<span class="fc" id="L77">                    args.put(PropertyBuilder.PropertyId.ENUM, p.getEnum());</span>
+<span class="fc" id="L78">                    p.setEnum(null);</span>
+<span class="fc" id="L79">                    args.put(PropertyBuilder.PropertyId.MINIMUM, p.getMinimum());</span>
+<span class="fc" id="L80">                    p.setMinimum(null);</span>
+<span class="fc" id="L81">                    args.put(PropertyBuilder.PropertyId.EXCLUSIVE_MINIMUM, p.isExclusiveMinimum());</span>
+<span class="fc" id="L82">                    p.setExclusiveMinimum(null);</span>
+<span class="fc" id="L83">                    args.put(PropertyBuilder.PropertyId.MAXIMUM, p.getMaximum());</span>
+<span class="fc" id="L84">                    p.setMaximum(null);</span>
+<span class="fc" id="L85">                    args.put(PropertyBuilder.PropertyId.EXCLUSIVE_MAXIMUM, p.isExclusiveMaximum());</span>
+<span class="fc" id="L86">                    p.setExclusiveMaximum(null);</span>
+<span class="fc" id="L87">                    Property items = PropertyBuilder.build(p.getType(), p.getFormat(), args);</span>
+<span class="fc" id="L88">                    p.type(ArrayProperty.TYPE).format(null).items(items);</span>
+                }
+
+<span class="fc" id="L91">                final Map&lt;PropertyBuilder.PropertyId, Object&gt; args = new EnumMap&lt;PropertyBuilder.PropertyId, Object&gt;(PropertyBuilder.PropertyId.class);</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">                if (StringUtils.isNotEmpty(defaultValue)) {</span>
+<span class="nc" id="L93">                    args.put(PropertyBuilder.PropertyId.DEFAULT, defaultValue);</span>
+                }
+<span class="fc" id="L95">                processAllowedValues(allowableValues, true, args);</span>
+<span class="fc" id="L96">                PropertyBuilder.merge(p.getItems(), args);</span>
+<span class="fc" id="L97">                p.collectionFormat(&quot;csv&quot;);</span>
+<span class="fc" id="L98">            } else {</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">                if (StringUtils.isNotEmpty(defaultValue)) {</span>
+<span class="fc" id="L100">                    p.setDefaultValue(defaultValue);</span>
+                }
+<span class="fc" id="L102">                processAllowedValues(allowableValues, false, p);</span>
+            }
+<span class="fc" id="L104">        } else {</span>
+            // must be a body param
+<span class="fc" id="L106">            BodyParameter bp = new BodyParameter();</span>
+<span class="fc" id="L107">            bp.setRequired(param.isRequired());</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            bp.setName(StringUtils.isNotEmpty(param.getName()) ? param.getName() : &quot;body&quot;);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">            if (StringUtils.isNotEmpty(param.getDescription())) {</span>
+<span class="fc" id="L110">                bp.setDescription(param.getDescription());</span>
+            }
+<span class="fc" id="L112">            final Property property = ModelConverters.getInstance().readAsProperty(javaType);</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (property != null) {</span>
+<span class="fc" id="L114">                final Map&lt;PropertyBuilder.PropertyId, Object&gt; args = new EnumMap&lt;PropertyBuilder.PropertyId, Object&gt;(PropertyBuilder.PropertyId.class);</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">                if (StringUtils.isNotEmpty(defaultValue)) {</span>
+<span class="nc" id="L116">                    args.put(PropertyBuilder.PropertyId.DEFAULT, defaultValue);</span>
+                }
+<span class="fc" id="L118">                bp.setSchema(PropertyBuilder.toModel(PropertyBuilder.merge(property, args)));</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">                for (Map.Entry&lt;String, Model&gt; entry : ModelConverters.getInstance().readAll(javaType).entrySet()) {</span>
+<span class="fc" id="L120">                    swagger.addDefinition(entry.getKey(), entry.getValue());</span>
+<span class="fc" id="L121">                }</span>
+            }
+<span class="fc" id="L123">            parameter = bp;</span>
+        }
+<span class="fc" id="L125">        return parameter;</span>
+    }
+
+    private static &lt;C&gt; void processAllowedValues(AllowableValues values, boolean key, C container) {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (values == null) {</span>
+<span class="fc" id="L130">            return;</span>
+        }
+        @SuppressWarnings(&quot;unchecked&quot;)
+<span class="fc" id="L133">        final AbstractAllowableValuesProcessor&lt;C, AllowableValues&gt; processor =</span>
+                (AbstractAllowableValuesProcessor&lt;C, AllowableValues&gt;) ALLOWED_VALUES_PROCESSORS.get(values.getClass(), key);
+<span class="fc" id="L135">        processor.process(container, values);</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Wraps either an @ApiParam or and @ApiImplicitParam
+     */
+
+    public interface ParamWrapper&lt;T extends Annotation&gt; {
+        String getName();
+
+        String getDescription();
+
+        String getDefaultValue();
+
+        String getAllowableValues();
+
+        boolean isRequired();
+
+        String getAccess();
+
+        boolean isAllowMultiple();
+
+        String getDataType();
+
+        String getParamType();
+
+        T getAnnotation();
+    }
+
+    /**
+     * The &lt;code&gt;AnnotationsHelper&lt;/code&gt; class defines helper methods for
+     * accessing supported parameter annotations.
+     */
+    private static class AnnotationsHelper {
+<span class="fc" id="L169">        private static final ApiParam DEFAULT_API_PARAM = getDefaultApiParam(null);</span>
+        private boolean context;
+<span class="fc" id="L171">        private ParamWrapper&lt;?&gt; apiParam = new ApiParamWrapper(DEFAULT_API_PARAM);</span>
+        private String defaultValue;
+
+        /**
+         * Constructs an instance.
+         *
+         * @param annotations array or parameter annotations
+         */
+<span class="fc" id="L179">        public AnnotationsHelper(List&lt;Annotation&gt; annotations) {</span>
+<span class="fc" id="L180">            String rsDefault = null;</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">            for (Annotation item : annotations) {</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">                if (item instanceof Context) {</span>
+<span class="nc" id="L183">                    context = true;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">                } else if (item instanceof ApiParam) {</span>
+<span class="fc" id="L185">                    apiParam = new ApiParamWrapper((ApiParam) item);</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">                } else if (item instanceof ApiImplicitParam) {</span>
+<span class="fc" id="L187">                    apiParam = new ApiImplicitParamWrapper((ApiImplicitParam) item);</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">                } else if (item instanceof DefaultValue) {</span>
+<span class="fc" id="L189">                    rsDefault = ((DefaultValue) item).value();</span>
+                }
+<span class="fc" id="L191">            }</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">            defaultValue = StringUtils.isNotEmpty(apiParam.getDefaultValue()) ? apiParam.getDefaultValue() : rsDefault;</span>
+<span class="fc" id="L193">        }</span>
+
+        /**
+         * Returns a default @{@link ApiParam} annotation for parameters without it.
+         *
+         * @param annotationHolder a placeholder for default @{@link ApiParam}
+         *                         annotation
+         * @return @{@link ApiParam} annotation
+         */
+        private static ApiParam getDefaultApiParam(@ApiParam String annotationHolder) {
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">            for (Method method : AnnotationsHelper.class.getDeclaredMethods()) {</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">                if (&quot;getDefaultApiParam&quot;.equals(method.getName())) {</span>
+<span class="fc" id="L205">                    return (ApiParam) method.getParameterAnnotations()[0][0];</span>
+                }
+            }
+<span class="nc" id="L208">            throw new IllegalStateException(&quot;Failed to locate default @ApiParam&quot;);</span>
+        }
+
+        /**
+         * Checks whether the @{@link Context} annotation is present.
+         *
+         * @return &lt;code&gt;true&lt;code&gt; if parameter is defined with the @{@link Context} annotation
+         */
+        public boolean isContext() {
+<span class="fc" id="L217">            return context;</span>
+        }
+
+        /**
+         * Returns @{@link ApiParam} annotation. If no @{@link ApiParam} is present
+         * a default one will be returned.
+         *
+         * @return @{@link ApiParam} annotation
+         */
+        public ParamWrapper&lt;?&gt; getApiParam() {
+<span class="fc" id="L227">            return apiParam;</span>
+        }
+
+        /**
+         * Returns default value from annotation.
+         *
+         * @return default value from annotation
+         */
+        public String getDefaultValue() {
+<span class="fc" id="L236">            return defaultValue;</span>
+        }
+    }
+
+    /**
+     * Wrapper implementation for ApiParam annotation
+     */
+
+    private final static class ApiParamWrapper implements ParamWrapper&lt;ApiParam&gt; {
+
+        private final ApiParam apiParam;
+
+<span class="fc" id="L248">        private ApiParamWrapper(ApiParam apiParam) {</span>
+<span class="fc" id="L249">            this.apiParam = apiParam;</span>
+<span class="fc" id="L250">        }</span>
+
+        @Override
+        public String getName() {
+<span class="fc" id="L254">            return apiParam.name();</span>
+        }
+
+        @Override
+        public String getDescription() {
+<span class="fc" id="L259">            return apiParam.value();</span>
+        }
+
+        @Override
+        public String getDefaultValue() {
+<span class="fc" id="L264">            return apiParam.defaultValue();</span>
+        }
+
+        @Override
+        public String getAllowableValues() {
+<span class="fc" id="L269">            return apiParam.allowableValues();</span>
+        }
+
+        @Override
+        public boolean isRequired() {
+<span class="fc" id="L274">            return apiParam.required();</span>
+        }
+
+        @Override
+        public String getAccess() {
+<span class="fc" id="L279">            return apiParam.access();</span>
+        }
+
+        @Override
+        public boolean isAllowMultiple() {
+<span class="fc" id="L284">            return apiParam.allowMultiple();</span>
+        }
+
+        @Override
+        public String getDataType() {
+<span class="fc" id="L289">            return null;</span>
+        }
+
+        @Override
+        public String getParamType() {
+<span class="nc" id="L294">            return null;</span>
+        }
+
+        @Override
+        public ApiParam getAnnotation() {
+<span class="nc" id="L299">            return apiParam;</span>
+        }
+    }
+
+    /**
+     * Wrapper implementation for ApiImplicitParam annotation
+     */
+
+<span class="nc" id="L307">    private final static class ApiImplicitParamWrapper implements ParamWrapper&lt;ApiImplicitParam&gt; {</span>
+
+        private final ApiImplicitParam apiParam;
+
+<span class="fc" id="L311">        private ApiImplicitParamWrapper(ApiImplicitParam apiParam) {</span>
+<span class="fc" id="L312">            this.apiParam = apiParam;</span>
+<span class="fc" id="L313">        }</span>
+
+        @Override
+        public String getName() {
+<span class="fc" id="L317">            return apiParam.name();</span>
+        }
+
+        @Override
+        public String getDescription() {
+<span class="fc" id="L322">            return apiParam.value();</span>
+        }
+
+        @Override
+        public String getDefaultValue() {
+<span class="fc" id="L327">            return apiParam.defaultValue();</span>
+        }
+
+        @Override
+        public String getAllowableValues() {
+<span class="fc" id="L332">            return apiParam.allowableValues();</span>
+        }
+
+        @Override
+        public boolean isRequired() {
+<span class="fc" id="L337">            return apiParam.required();</span>
+        }
+
+        @Override
+        public String getAccess() {
+<span class="fc" id="L342">            return apiParam.access();</span>
+        }
+
+        @Override
+        public boolean isAllowMultiple() {
+<span class="fc" id="L347">            return apiParam.allowMultiple();</span>
+        }
+
+        @Override
+        public String getDataType() {
+<span class="fc" id="L352">            return apiParam.dataType();</span>
+        }
+
+        @Override
+        public String getParamType() {
+<span class="nc" id="L357">            return apiParam.paramType();</span>
+        }
+
+        @Override
+        public ApiImplicitParam getAnnotation() {
+<span class="nc" id="L362">            return apiParam;</span>
+        }
+    }
+
+    static {
+<span class="fc" id="L367">        ALLOWED_VALUES_PROCESSORS.put(AllowableRangeValues.class, true, new ArgumentsRangeProcessor());</span>
+<span class="fc" id="L368">        ALLOWED_VALUES_PROCESSORS.put(AllowableRangeValues.class, false, new ParameterRangeProcessor());</span>
+<span class="fc" id="L369">        ALLOWED_VALUES_PROCESSORS.put(AllowableEnumValues.class, true, new ArgumentsEnumProcessor());</span>
+<span class="fc" id="L370">        ALLOWED_VALUES_PROCESSORS.put(AllowableEnumValues.class, false, new ParameterEnumProcessor());</span>
+<span class="fc" id="L371">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

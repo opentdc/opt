@@ -1,0 +1,51 @@
+Invoking Maven for the goals: [org.apache.maven.plugins:maven-javadoc-plugin:2.7:javadoc] with no properties
+
+M2_HOME=/Users/bruno/proj/rep/apache-maven-3.2.5
+MAVEN_OPTS=null
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_76.jdk/Contents/Home/jre
+JAVA_OPTS=null
+
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building swagger-jersey-jaxrs 1.5.0
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] >>> maven-javadoc-plugin:2.7:javadoc (default-cli) > generate-sources @ swagger-jersey-jaxrs >>>
+[INFO] Downloading: https://repo.maven.apache.org/maven2/io/swagger/swagger-jaxrs/1.5.0/swagger-jaxrs-1.5.0.pom
+[WARNING] Checksum validation failed, expected 181895346ababdeac47389e094e12914b5139e7b but is b468a80e6c67ba395801148f5474b98fbec0e463 for https://repo.maven.apache.org/maven2/io/swagger/swagger-jaxrs/1.5.0/swagger-jaxrs-1.5.0.pom
+[WARNING] Could not validate integrity of download from https://repo.maven.apache.org/maven2/io/swagger/swagger-jaxrs/1.5.0/swagger-jaxrs-1.5.0.pom: Checksum validation failed, expected 181895346ababdeac47389e094e12914b5139e7b but is b468a80e6c67ba395801148f5474b98fbec0e463
+[WARNING] Checksum validation failed, expected 181895346ababdeac47389e094e12914b5139e7b but is b468a80e6c67ba395801148f5474b98fbec0e463 for https://repo.maven.apache.org/maven2/io/swagger/swagger-jaxrs/1.5.0/swagger-jaxrs-1.5.0.pom
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/io/swagger/swagger-jaxrs/1.5.0/swagger-jaxrs-1.5.0.pom (5 KB at 11.4 KB/sec)
+[INFO] Downloading: https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.10.3/scala-library-2.10.3.jar
+[INFO] Downloading: https://repo.maven.apache.org/maven2/io/swagger/swagger-jaxrs/1.5.0/swagger-jaxrs-1.5.0.jar
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/io/swagger/swagger-jaxrs/1.5.0/swagger-jaxrs-1.5.0.jar (71 KB at 312.6 KB/sec)
+[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.10.3/scala-library-2.10.3.jar (6959 KB at 3094.3 KB/sec)
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.0-beta-1:enforce (enforce-maven) @ swagger-jersey-jaxrs ---
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.0-beta-1:enforce (enforce-versions) @ swagger-jersey-jaxrs ---
+[INFO] 
+[INFO] --- scala-maven-plugin:3.1.5:add-source (default) @ swagger-jersey-jaxrs ---
+[INFO] Add Source directory: /Users/bruno/proj/opentdc/opt/swagger/jre-1.7/swagger-core-1.5.0/modules/swagger-jersey-jaxrs/src/main/scala
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.7.2.201409121644:prepare-agent (default-prepare-agent) @ swagger-jersey-jaxrs ---
+[INFO] argLine set to -javaagent:/Users/bruno/.m2/repository/org/jacoco/org.jacoco.agent/0.7.2.201409121644/org.jacoco.agent-0.7.2.201409121644-runtime.jar=destfile=/Users/bruno/proj/opentdc/opt/swagger/jre-1.7/swagger-core-1.5.0/modules/swagger-jersey-jaxrs/target/jacoco.exec,excludes=**/io/swagger/config/FilterFactory.*:**/io/swagger/model/ApiInfo.*:**/io/swagger/util/Yaml.*:**/io/swagger/jackson/*:**/io/swagger/converter/ModelConverters.*:**/io/swagger/jaxrs/json/JacksonJsonProvider.*:**/io/swagger/jaxrs/listing/ApiListingResource.*:**/io/swagger/jaxrs/listing/SwaggerSerializers.*:**/io/swagger/jaxrs/config/WebXMLReader.*:**/io/swagger/jaxrs/config/DefaultJaxrsScanner.*:**/io/swagger/jaxrs/config/DefaultJaxrsConfig.*
+[INFO] 
+[INFO] <<< maven-javadoc-plugin:2.7:javadoc (default-cli) < generate-sources @ swagger-jersey-jaxrs <<<
+[INFO] 
+[INFO] --- maven-javadoc-plugin:2.7:javadoc (default-cli) @ swagger-jersey-jaxrs ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 4.514 s
+[INFO] Finished at: 2015-06-14T23:12:35+02:00
+[INFO] Final Memory: 17M/245M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-javadoc-plugin:2.7:javadoc (default-cli) on project swagger-jersey-jaxrs: An error has occurred in JavaDocs report generation:Unable to find javadoc command: The javadoc executable '/Library/Java/JavaVirtualMachines/jdk1.7.0_76.jdk/Contents/Home/jre/bin/javadoc' doesn't exist or is not a file. Verify the JAVA_HOME environment variable. -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

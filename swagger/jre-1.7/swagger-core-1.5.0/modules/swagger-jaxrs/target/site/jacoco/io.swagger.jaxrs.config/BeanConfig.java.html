@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BeanConfig.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">swagger-jaxrs</a> &gt; <a href="index.source.html" class="el_package">io.swagger.jaxrs.config</a> &gt; <span class="el_source">BeanConfig.java</span></div><h1>BeanConfig.java</h1><pre class="source lang-java linenums">package io.swagger.jaxrs.config;
+
+import io.swagger.annotations.Api;
+import io.swagger.config.FilterFactory;
+import io.swagger.config.Scanner;
+import io.swagger.config.ScannerFactory;
+import io.swagger.config.SwaggerConfig;
+import io.swagger.core.filter.SwaggerSpecFilter;
+import io.swagger.jaxrs.Reader;
+import io.swagger.models.Contact;
+import io.swagger.models.Info;
+import io.swagger.models.License;
+import io.swagger.models.Scheme;
+import io.swagger.models.Swagger;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashSet;
+import java.util.Set;
+
+<span class="fc" id="L27">public class BeanConfig extends AbstractScanner implements Scanner, SwaggerConfig {</span>
+<span class="fc" id="L28">    Logger LOGGER = LoggerFactory.getLogger(BeanConfig.class);</span>
+
+<span class="fc" id="L30">    Reader reader = new Reader(new Swagger());</span>
+
+    String resourcePackage;
+    String[] schemes;
+    String title;
+    String version;
+    String description;
+    String termsOfServiceUrl;
+    String contact;
+    String license;
+    String licenseUrl;
+    String filterClass;
+
+    Info info;
+    String host;
+    String basePath;
+
+    public String getResourcePackage() {
+<span class="nc" id="L48">        return this.resourcePackage;</span>
+    }
+
+    public void setResourcePackage(String resourcePackage) {
+<span class="fc" id="L52">        this.resourcePackage = resourcePackage;</span>
+<span class="fc" id="L53">    }</span>
+
+    public String[] getSchemes() {
+<span class="nc" id="L56">        return schemes;</span>
+    }
+
+    public void setSchemes(String[] schemes) {
+<span class="fc" id="L60">        this.schemes = schemes;</span>
+<span class="fc" id="L61">    }</span>
+
+    public String getTitle() {
+<span class="nc" id="L64">        return title;</span>
+    }
+
+    public void setTitle(String title) {
+<span class="fc" id="L68">        this.title = title;</span>
+<span class="fc" id="L69">    }</span>
+
+    public String getVersion() {
+<span class="nc" id="L72">        return version;</span>
+    }
+
+    public void setVersion(String version) {
+<span class="nc" id="L76">        this.version = version;</span>
+<span class="nc" id="L77">    }</span>
+
+    public String getDescription() {
+<span class="nc" id="L80">        return description;</span>
+    }
+
+    public void setDescription(String description) {
+<span class="fc" id="L84">        this.description = description;</span>
+<span class="fc" id="L85">    }</span>
+
+    public String getTermsOfServiceUrl() {
+<span class="nc" id="L88">        return termsOfServiceUrl;</span>
+    }
+
+    public void setTermsOfServiceUrl(String termsOfServiceUrl) {
+<span class="fc" id="L92">        this.termsOfServiceUrl = termsOfServiceUrl;</span>
+<span class="fc" id="L93">    }</span>
+
+    public String getContact() {
+<span class="nc" id="L96">        return contact;</span>
+    }
+
+    public void setContact(String contact) {
+<span class="fc" id="L100">        this.contact = contact;</span>
+<span class="fc" id="L101">    }</span>
+
+    public String getLicense() {
+<span class="nc" id="L104">        return license;</span>
+    }
+
+    public void setLicense(String license) {
+<span class="fc" id="L108">        this.license = license;</span>
+<span class="fc" id="L109">    }</span>
+
+    public String getLicenseUrl() {
+<span class="nc" id="L112">        return licenseUrl;</span>
+    }
+
+    public void setLicenseUrl(String licenseUrl) {
+<span class="fc" id="L116">        this.licenseUrl = licenseUrl;</span>
+<span class="fc" id="L117">    }</span>
+
+    public Info getInfo() {
+<span class="nc" id="L120">        return info;</span>
+    }
+
+    public void setInfo(Info info) {
+<span class="nc" id="L124">        this.info = info;</span>
+<span class="nc" id="L125">    }</span>
+
+    public String getHost() {
+<span class="nc" id="L128">        return host;</span>
+    }
+
+    public void setHost(String host) {
+<span class="fc" id="L132">        this.host = host;</span>
+<span class="fc" id="L133">    }</span>
+
+    public String getFilterClass() {
+<span class="nc" id="L136">        return filterClass;</span>
+    }
+
+    public void setFilterClass(String filterClass) {
+<span class="nc" id="L140">        this.filterClass = filterClass;</span>
+<span class="nc" id="L141">    }</span>
+
+    public String getBasePath() {
+<span class="nc" id="L144">        return basePath;</span>
+    }
+
+    public void setBasePath(String basePath) {
+<span class="pc bpc" id="L148" title="2 of 4 branches missed.">        if (!&quot;&quot;.equals(basePath) &amp;&amp; basePath != null) {</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            if (!basePath.startsWith(&quot;/&quot;)) {</span>
+<span class="nc" id="L150">                this.basePath = &quot;/&quot; + basePath;</span>
+            } else {
+<span class="fc" id="L152">                this.basePath = basePath;</span>
+            }
+        }
+<span class="fc" id="L155">    }</span>
+
+    public void setPrettyPrint(String prettyPrint) {
+<span class="nc bnc" id="L158" title="All 2 branches missed.">        if (prettyPrint != null) {</span>
+<span class="nc" id="L159">            this.prettyPrint = Boolean.parseBoolean(prettyPrint);</span>
+        }
+<span class="nc" id="L161">    }</span>
+
+    public boolean getScan() {
+<span class="nc" id="L164">        return true;</span>
+    }
+
+    public void setScan(boolean shouldScan) {
+<span class="fc" id="L168">        Set&lt;Class&lt;?&gt;&gt; classes = classes();</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (classes != null) {</span>
+<span class="fc" id="L170">            reader.read(classes)</span>
+                    .host(host)
+                    .basePath(basePath)
+                    .info(info);
+        }
+<span class="fc" id="L175">        ScannerFactory.setScanner(this);</span>
+<span class="fc" id="L176">    }</span>
+
+    public Set&lt;Class&lt;?&gt;&gt; classes() {
+<span class="fc" id="L179">        ConfigurationBuilder config = new ConfigurationBuilder();</span>
+<span class="fc" id="L180">        Set&lt;String&gt; acceptablePackages = new HashSet&lt;String&gt;();</span>
+
+<span class="fc" id="L182">        boolean allowAllPackages = false;</span>
+
+<span class="pc bpc" id="L184" title="2 of 4 branches missed.">        if (resourcePackage != null &amp;&amp; !&quot;&quot;.equals(resourcePackage)) {</span>
+<span class="fc" id="L185">            String[] parts = resourcePackage.split(&quot;,&quot;);</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">            for (String pkg : parts) {</span>
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">                if (!&quot;&quot;.equals(pkg)) {</span>
+<span class="fc" id="L188">                    acceptablePackages.add(pkg);</span>
+<span class="fc" id="L189">                    config.addUrls(ClasspathHelper.forPackage(pkg));</span>
+                }
+            }
+<span class="fc" id="L192">        } else {</span>
+<span class="nc" id="L193">            allowAllPackages = true;</span>
+        }
+
+<span class="fc" id="L196">        config.setScanners(new ResourcesScanner(), new TypeAnnotationsScanner(), new SubTypesScanner());</span>
+
+<span class="fc" id="L198">        this.info = new Info()</span>
+                .description(description)
+                .title(title)
+                .version(version)
+                .termsOfService(termsOfServiceUrl);
+
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (contact != null) {</span>
+<span class="fc" id="L205">            this.info.contact(new Contact()</span>
+                    .name(contact));
+        }
+<span class="pc bpc" id="L208" title="2 of 4 branches missed.">        if (license != null &amp;&amp; licenseUrl != null) {</span>
+<span class="fc" id="L209">            this.info.license(new License()</span>
+                    .name(license)
+                    .url(licenseUrl));
+        }
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">        if (schemes != null) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">            for (String scheme : schemes) {</span>
+<span class="fc" id="L215">                reader.getSwagger().scheme(Scheme.forValue(scheme));</span>
+            }
+        }
+
+<span class="fc" id="L219">        reader.getSwagger().setInfo(info);</span>
+<span class="fc" id="L220">        final Reflections reflections = new Reflections(config);</span>
+<span class="fc" id="L221">        Set&lt;Class&lt;?&gt;&gt; classes = reflections.getTypesAnnotatedWith(Api.class);</span>
+<span class="fc" id="L222">        classes.addAll(reflections.getTypesAnnotatedWith(javax.ws.rs.Path.class));</span>
+
+<span class="fc" id="L224">        Set&lt;Class&lt;?&gt;&gt; output = new HashSet&lt;Class&lt;?&gt;&gt;();</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        for (Class&lt;?&gt; cls : classes) {</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">            if (allowAllPackages) {</span>
+<span class="nc" id="L227">                output.add(cls);</span>
+            } else {
+<span class="fc bfc" id="L229" title="All 2 branches covered.">                for (String pkg : acceptablePackages) {</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">                    if (cls.getPackage().getName().startsWith(pkg)) {</span>
+<span class="fc" id="L231">                        output.add(cls);</span>
+                    }
+<span class="fc" id="L233">                }</span>
+            }
+<span class="fc" id="L235">        }</span>
+<span class="fc" id="L236">        return output;</span>
+    }
+
+    public Swagger getSwagger() {
+<span class="fc" id="L240">        return reader.getSwagger();</span>
+    }
+
+    public Swagger configure(Swagger swagger) {
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        if (schemes != null) {</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">            for (String scheme : schemes) {</span>
+<span class="nc" id="L246">                swagger.scheme(Scheme.forValue(scheme));</span>
+            }
+        }
+<span class="nc bnc" id="L249" title="All 2 branches missed.">        if (filterClass != null) {</span>
+            try {
+<span class="nc" id="L251">                SwaggerSpecFilter filter = (SwaggerSpecFilter) Class.forName(filterClass).newInstance();</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">                if (filter != null) {</span>
+<span class="nc" id="L253">                    FilterFactory.setFilter(filter);</span>
+                }
+<span class="nc" id="L255">            } catch (Exception e) {</span>
+<span class="nc" id="L256">                LOGGER.error(&quot;failed to load filter&quot;, e);</span>
+<span class="nc" id="L257">            }</span>
+        }
+<span class="nc" id="L259">        return swagger.info(info)</span>
+                .host(host)
+                .basePath(basePath);
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

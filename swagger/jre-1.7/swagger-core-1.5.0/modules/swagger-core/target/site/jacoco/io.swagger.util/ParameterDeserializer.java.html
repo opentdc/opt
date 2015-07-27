@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ParameterDeserializer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">swagger-core</a> &gt; <a href="index.source.html" class="el_package">io.swagger.util</a> &gt; <span class="el_source">ParameterDeserializer.java</span></div><h1>ParameterDeserializer.java</h1><pre class="source lang-java linenums">package io.swagger.util;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.CookieParameter;
+import io.swagger.models.parameters.FormParameter;
+import io.swagger.models.parameters.HeaderParameter;
+import io.swagger.models.parameters.Parameter;
+import io.swagger.models.parameters.PathParameter;
+import io.swagger.models.parameters.QueryParameter;
+import io.swagger.models.parameters.RefParameter;
+
+import java.io.IOException;
+
+<span class="fc" id="L19">public class ParameterDeserializer extends JsonDeserializer&lt;Parameter&gt; {</span>
+    @Override
+    public Parameter deserialize(JsonParser jp, DeserializationContext ctxt)
+            throws IOException, JsonProcessingException {
+<span class="fc" id="L23">        Parameter result = null;</span>
+
+<span class="fc" id="L25">        JsonNode node = jp.getCodec().readTree(jp);</span>
+<span class="fc" id="L26">        JsonNode sub = node.get(&quot;$ref&quot;);</span>
+<span class="fc" id="L27">        JsonNode inNode = node.get(&quot;in&quot;);</span>
+
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (sub != null) {</span>
+<span class="fc" id="L30">            result = Json.mapper().convertValue(sub, RefParameter.class);</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        } else if (inNode != null) {</span>
+<span class="fc" id="L32">            String in = inNode.asText();</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            if (&quot;query&quot;.equals(in)) {</span>
+<span class="fc" id="L34">                result = Json.mapper().convertValue(node, QueryParameter.class);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            } else if (&quot;header&quot;.equals(in)) {</span>
+<span class="fc" id="L36">                result = Json.mapper().convertValue(node, HeaderParameter.class);</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            } else if (&quot;path&quot;.equals(in)) {</span>
+<span class="fc" id="L38">                result = Json.mapper().convertValue(node, PathParameter.class);</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">            } else if (&quot;formData&quot;.equals(in)) {</span>
+<span class="nc" id="L40">                result = Json.mapper().convertValue(node, FormParameter.class);</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            } else if (&quot;body&quot;.equals(in)) {</span>
+<span class="fc" id="L42">                result = Json.mapper().convertValue(node, BodyParameter.class);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">            } else if (&quot;cookie&quot;.equals(in)) {</span>
+<span class="nc" id="L44">                result = Json.mapper().convertValue(node, CookieParameter.class);</span>
+            }
+        }
+
+<span class="fc" id="L48">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

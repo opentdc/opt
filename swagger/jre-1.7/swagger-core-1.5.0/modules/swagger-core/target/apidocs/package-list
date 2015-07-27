@@ -1,0 +1,6 @@
+io.swagger.config
+io.swagger.converter
+io.swagger.core.filter
+io.swagger.jackson
+io.swagger.model
+io.swagger.util

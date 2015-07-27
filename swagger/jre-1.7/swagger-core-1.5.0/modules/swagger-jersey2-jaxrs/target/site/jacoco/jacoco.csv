@@ -1,0 +1,4 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+swagger-jersey2-jaxrs (Jersey 2.x support),io.swagger.jersey.listing,ApiListingResourceJSON,3,0,0,0,1,0,1,0,1,0
+swagger-jersey2-jaxrs (Jersey 2.x support),io.swagger.jersey,SwaggerJersey2Jaxrs,12,184,9,25,2,41,8,11,0,2
+swagger-jersey2-jaxrs (Jersey 2.x support),io.swagger.jersey.config,JerseyJaxrsConfig,24,0,0,0,6,0,2,0,2,0

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractSpecFilter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">swagger-core</a> &gt; <a href="index.source.html" class="el_package">io.swagger.core.filter</a> &gt; <span class="el_source">AbstractSpecFilter.java</span></div><h1>AbstractSpecFilter.java</h1><pre class="source lang-java linenums">package io.swagger.core.filter;
+
+import io.swagger.model.ApiDescription;
+import io.swagger.models.Model;
+import io.swagger.models.Operation;
+import io.swagger.models.parameters.Parameter;
+import io.swagger.models.properties.Property;
+
+import java.util.List;
+import java.util.Map;
+
+<span class="fc" id="L12">public abstract class AbstractSpecFilter implements SwaggerSpecFilter {</span>
+    public boolean isOperationAllowed(
+            Operation operation,
+            ApiDescription api,
+            Map&lt;String, List&lt;String&gt;&gt; params,
+            Map&lt;String, String&gt; cookies,
+            Map&lt;String, List&lt;String&gt;&gt; headers) {
+<span class="fc" id="L19">        return true;</span>
+    }
+
+    public boolean isParamAllowed(
+            Parameter parameter,
+            Operation operation,
+            ApiDescription api,
+            Map&lt;String, List&lt;String&gt;&gt; params,
+            Map&lt;String, String&gt; cookies,
+            Map&lt;String, List&lt;String&gt;&gt; headers) {
+<span class="fc" id="L29">        return true;</span>
+    }
+
+    public boolean isPropertyAllowed(
+            Model model,
+            Property property,
+            String propertyName,
+            Map&lt;String, List&lt;String&gt;&gt; params,
+            Map&lt;String, String&gt; cookies,
+            Map&lt;String, List&lt;String&gt;&gt; headers) {
+<span class="fc" id="L39">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>
